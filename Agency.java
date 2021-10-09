@@ -111,8 +111,12 @@ public class Agency{
                     }
                     case 8:{
                         System.out.println("Informe o numero da conta para busca");
-                        int op8 = sc9.nextInt();
-                        System.out.println(c.acountMoviments(op8));
+                        int op8 = sc9.nextInt();     
+                        c.acountMoviments(op8);
+                        for(int i = 0; i<=c.acountMoviments(op8).size()-1;i++){
+                            System.out.println(c.acountMoviments(op8).get(i).toString());
+                            System.out.println("\n");
+                        }                         
                         menu(c);                
                         break;
                     }

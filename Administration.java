@@ -13,7 +13,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
     private static int numbers = 0;    
     private static int numbersMov = 0;    
     
-    ArrayList<String> hashs = new ArrayList();
+    ArrayList<String> hashes = new ArrayList();
     ListAccounts ListOfAccounts = new ListAccounts();
     
 
@@ -30,8 +30,8 @@ public class Administration extends UnicastRemoteObject implements Functions {
 
     public boolean keyCheck(String r){
             boolean B = false;
-            for(int i=0; i<=hashs.size()-1;i++){
-                if(hashs.get(i).equals(r)){
+            for(int i=0; i<=hashes.size()-1;i++){
+                if(hashes.get(i).equals(r)){
                     B = true;
                 };
             }
@@ -188,13 +188,13 @@ public class Administration extends UnicastRemoteObject implements Functions {
             for(int i = 0; i<=Accounts.size()-1;i++){
                 if(Accounts.get(i).getNum() == acc){
                     Accounts.get(i).setBalancePlus(value);
-                    Operation M = new Operation(0, "", "Depósito: "+ value);
+                    Operation M = new Operation(0, "", "Deposito: "+ value);
                     M.setNum(Administration.numbersMov = Administration.numbersMov+1);
                     String key = rndString();        
                     while(keyCheck(key)==true){
                         key = rndString();            
                     }
-                    hashs.add(key);
+                    hashes.add(key);
                     M.setSign(key);
                     Accounts.get(i).getListOperations().insert(M);              
                     found = true;
@@ -222,7 +222,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
                     while(keyCheck(key)==true){
                         key = rndString();            
                     }
-                    hashs.add(key);
+                    hashes.add(key);
                     M.setSign(key);
                     Accounts.get(i).getListOperations().insert(M);   
                     found = true;
@@ -235,18 +235,18 @@ public class Administration extends UnicastRemoteObject implements Functions {
             return res;
         }
 
-        public ArrayList<String> movements(int c) throws RemoteException{
+        public ArrayList<String> movements(int c) throws RemoteException{            
             ArrayList<String> aux = new ArrayList<>();  
             boolean found = false;  
             for(int i=0; i<=Accounts.size()-1;i++){
                 if(Accounts.get(i).getNum() == c){
-                    found = true;
-                    Accounts.get(i).getListOperations().listOPS();
+                    aux = Accounts.get(i).getListOperations().getOperationString();
+                    found = true;                   
                 }
             }
             if(found == false){
                 aux.add("Conta nao encontrada");
-                aux.toString();
+                aux.toString();                
             }
             return aux;
         }
@@ -285,7 +285,8 @@ public class Administration extends UnicastRemoteObject implements Functions {
         public void setSign(String oneSign) throws RemoteException{
             sigMov = oneSign;
         }
-    
+
+        @Override
         public String toString(){
             return "Numero do movimento " + getNum() + "-" + " Hash: " + getSignature() + " Movimento: " + getRealizado();
         } 
@@ -314,6 +315,18 @@ public class Administration extends UnicastRemoteObject implements Functions {
                 System.out.println(OPP.toString());
             }
         }
+
+        public ArrayList<String> getOperationString(){
+            ArrayList<String> aux = new ArrayList<>();
+            for(int i = 0; i<=Movements.size()-1;i++){
+                String S1 = "Numero do movimento: " + Integer.toString(Movements.get(i).getNum()) + " - ";
+                String S2 = "Hash: " + Movements.get(i).getSignature() + " - ";
+                String S3 = "Movimento: " + Movements.get(i).getRealizado();
+                String Full = S1.concat(S2).concat(S3);
+                aux.add(Full);                                
+            }          
+            return aux;           
+        }
         
     }
         
@@ -325,7 +338,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
         while(keyCheck(key)==true){
             key = rndString();
         }
-        hashs.add(key);
+        hashes.add(key);
         A1.setSign(key);
         A1.setListOP(LO);        
         ListOfAccounts.insert(A1);
@@ -361,7 +374,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
         
     };
 
-    public ArrayList<String> acountMoviments(int x) throws RemoteException{
+    public ArrayList<String> acountMoviments(int x) throws RemoteException{      
         return ListOfAccounts.movements(x);
 
     }
