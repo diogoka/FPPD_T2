@@ -15,6 +15,10 @@ public class Administration extends UnicastRemoteObject implements Functions {
     
     ArrayList<String> hashes = new ArrayList();
     ListAccounts ListOfAccounts = new ListAccounts();
+
+    public ArrayList<String> ListOfHashes() throws RemoteException{
+        return hashes;
+    }
     
 
     public String rndString () {
@@ -96,7 +100,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
         @Override
         public String toString() {
             try {
-                return "Numero da conta: " + getNum()  + " - " + " Hash: " + getSignature() + " Saldo: " + getBalance();
+                return "Número da conta: " + getNum()  + " - " + " Hash: " + getSignature() + " - " +" Saldo: R$ " + getBalance();
             } catch (RemoteException e) {                
                 e.printStackTrace();
             }
@@ -133,7 +137,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
             }
 
             if (found == false){
-                System.out.println("Conta nao encontrada.");
+                System.out.println("Conta não encontrada.");
             }
             return found;
             
@@ -149,7 +153,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
                 
             }
             if (found == false) {
-                System.out.println("Conta nao encontrada.");
+                System.out.println("Conta não encontrada.");
             }
        
             return found;
@@ -167,7 +171,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
                 
             }
             if (found == false) {
-                System.out.println("Conta nao encontrada.");
+                System.out.println("Conta não encontrada.");
             }
             return res;            
         }
@@ -188,7 +192,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
             for(int i = 0; i<=Accounts.size()-1;i++){
                 if(Accounts.get(i).getNum() == acc){
                     Accounts.get(i).setBalancePlus(value);
-                    Operation M = new Operation(0, "", "Deposito: "+ value);
+                    Operation M = new Operation(0, "", "Depósito: "+ value);
                     M.setNum(Administration.numbersMov = Administration.numbersMov+1);
                     String key = rndString();        
                     while(keyCheck(key)==true){
@@ -203,7 +207,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
 
             }
             if (found == false){
-                res = "Conta nao encontrada.";
+                res = "Conta não encontrada.";
             }
 
             return res;
@@ -230,7 +234,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
                 }
             }
             if (found == false){
-                res = "Conta nao encontrada.";
+                res = "Conta não encontrada.";
             }
             return res;
         }
@@ -245,7 +249,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
                 }
             }
             if(found == false){
-                aux.add("Conta nao encontrada");
+                aux.add("Conta não encontrada");
                 aux.toString();                
             }
             return aux;
@@ -288,7 +292,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
 
         @Override
         public String toString(){
-            return "Numero do movimento " + getNum() + "-" + " Hash: " + getSignature() + " Movimento: " + getRealizado();
+            return "Número do movimento " + getNum() + "-" + " Hash: " + getSignature() + " Movimento: " + getRealizado();
         } 
     }
 
@@ -310,7 +314,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
         }
      
         public void listOPS() {
-            System.out.println("Lista de OperaÃ§oes");
+            System.out.println("Lista de Operações");
             for (Operation OPP : Movements) {
                 System.out.println(OPP.toString());
             }
@@ -319,7 +323,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
         public ArrayList<String> getOperationString(){
             ArrayList<String> aux = new ArrayList<>();
             for(int i = 0; i<=Movements.size()-1;i++){
-                String S1 = "Numero do movimento: " + Integer.toString(Movements.get(i).getNum()) + " - ";
+                String S1 = "Número do movimento: " + Integer.toString(Movements.get(i).getNum()) + " - ";
                 String S2 = "Hash: " + Movements.get(i).getSignature() + " - ";
                 String S3 = "Movimento: " + Movements.get(i).getRealizado();
                 String Full = S1.concat(S2).concat(S3);
@@ -344,7 +348,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
         ListOfAccounts.insert(A1);
         A1.toString();    
         System.out.println("Conta aberta:");
-        System.out.println("Numero da conta: " + A1.getNum() + " - Hash: "+ A1.getSignature() + " - Saldo :" + A1.getBalance());
+        System.out.println("Número da conta: " + A1.getNum() + " - Hash: "+ A1.getSignature() + " - Saldo: R$ " + A1.getBalance());
     }; 
 
     public boolean closeAccount(int k) throws RemoteException{
@@ -377,6 +381,10 @@ public class Administration extends UnicastRemoteObject implements Functions {
     public ArrayList<String> acountMoviments(int x) throws RemoteException{      
         return ListOfAccounts.movements(x);
 
+    }
+
+    public ArrayList<String> bankHashes() throws RemoteException{
+        return ListOfHashes();
     }
 
 

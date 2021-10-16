@@ -12,5 +12,6 @@ public interface Functions extends Remote
     public String balance(int k) throws RemoteException;
     public ArrayList<String> database() throws RemoteException; 
     public ArrayList<String> acountMoviments (int y) throws RemoteException;
+    public ArrayList<String> bankHashes() throws RemoteException;
 
 }
