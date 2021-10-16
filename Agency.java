@@ -1,7 +1,6 @@
 import java.rmi.Naming;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public class Agency{
@@ -18,15 +17,13 @@ public class Agency{
     
     public static void menu(Functions aux) throws RemoteException {
         Functions c = aux;
+        System.out.println("\n");  
         System.out.println("Agência Bancária. ");  
         Scanner sc1 = new Scanner(System.in);
         Scanner sc2 = new Scanner(System.in);           
-        Scanner sc3 = new Scanner(System.in);           
-        Scanner sc4 = new Scanner(System.in);           
+        Scanner sc3 = new Scanner(System.in);       
         Scanner sc5 = new Scanner(System.in);           
         Scanner sc6 = new Scanner(System.in);           
- 
-        
             
         System.out.println("DIGITE: ");
         System.out.println("1 - Solicitar abertura de conta");
@@ -42,14 +39,14 @@ public class Agency{
         System.out.println("11 - Simulação erro saque");
         System.out.println("0 - Sair");
 
-
         try{
             int choose = sc1.nextInt();            
             if(choose == 1 || choose == 2 || choose == 3 || choose == 4 || choose == 5 || choose == 6 || choose == 7 || choose == 8 || choose == 9 || choose == 10 || choose == 11 || choose == 0){
                 switch (choose){
-                    case 1: {                
+                    case 1: {                                        
+                        c.openAccount();
                         System.out.println("Conta aberta.");
-                        c.openAccount();                        
+                        System.out.println("Dados da conta: \n" + c.database().get(c.database().size()-1));                        
                         menu(c);
                         break;
                     }
@@ -57,7 +54,7 @@ public class Agency{
                         System.out.println("Informe o número da conta a ser fechada:");
                         int op = sc2.nextInt();
                         if(c.closeAccount(op) == true){
-                            System.out.println("Conta encerrada.");
+                            System.out.println("Conta encerrada.");                            
                         }
                         else{
                             System.out.println("Conta inexistente.");
@@ -69,7 +66,7 @@ public class Agency{
                         System.out.println("Informe o número da conta para autenticacao");
                         int op2 = sc2.nextInt();
                         if(c.autentication(op2)==true){
-                            System.out.println("Conta Autenticada.");
+                            System.out.println("Conta Autenticada.");                            
                         }
                         else{
                             System.out.println("Conta inexistente.");
@@ -80,23 +77,25 @@ public class Agency{
                     case 4: {
                         System.out.println("Informe o número da conta para checagem do saldo:");
                         int op3 = sc2.nextInt();
-                        System.out.println("Saldo atual: " + c.balance(op3));
+                        System.out.println("Saldo atual: R$ " + c.balance(op3));
                         menu(c);
                         break;
                     }
                     case 5: {
-                        System.out.println("Informe o número da conta e o valor a ser depositado:");
+                        System.out.println("Informe o número da conta:");
                         int op4 = sc2.nextInt();
+                        System.out.println("Informe o valor a ser depositado:");
                         double op5 = sc3.nextDouble();
-                        System.out.println("Saldo atual: " + c.deposit(op4, op5));
+                        System.out.println("Saldo atualizado: R$ " + c.deposit(op4, op5));
                         menu(c); 
                         break;
                     }
                     case 6: {
-                        System.out.println("Informe o número da conta e o valor a ser sacado:");
+                        System.out.println("Informe o número da conta:");
                         int op6 = sc2.nextInt();
+                        System.out.println("Informe o valor a ser sacado:");
                         double op7 = sc3.nextDouble();
-                        System.out.println("Saldo atual: "+ c.withdraw(op6, op7));
+                        System.out.println("Saldo atualizado: R$ "+ c.withdraw(op6, op7));
                         menu(c);
                         break;
                     }
@@ -110,9 +109,10 @@ public class Agency{
                         break;
                     }
                     case 8:{
-                        System.out.println("Informe o número da conta para busca");
+                        System.out.println("Informe o número da conta para busca:");
                         int op8 = sc2.nextInt();     
                         c.acountMoviments(op8);
+                        System.out.println("Lista de movimentos: ");
                         for(int i = 0; i<=c.acountMoviments(op8).size()-1;i++){
                             System.out.println(c.acountMoviments(op8).get(i).toString());
                             System.out.println("\n");
@@ -127,18 +127,18 @@ public class Agency{
                         String parameter = c.database().get(c.database().size()-1);
                         int indexStart = parameter.indexOf("Hash");
                         String r = parameter.substring(indexStart+6, indexStart+18);                    
-                        System.out.println("Solicitando abertura da conta....");
+                        System.out.println("Solicitando abertura da conta...");
                         try {
                             t.sleep(7000);
                             System.out.println("Servidor não respondeu.");
                             System.out.println("Tentar novamente? - digite Y para sim ou N para não.");
                             String option = sc2.nextLine();
                             if(option.equalsIgnoreCase("Y")){  
-                                System.out.println("Solicitando a abertura da conta " + c.database().get(c.database().size()-1) + "novamente ...");
+                                System.out.println("Solicitando a abertura da conta " + c.database().get(c.database().size()-1) + " novamente...");
                                 t.sleep(3000);                              
                                 for (int i = 0; i<=c.bankHashes().size()-1;i++){
                                     if(c.bankHashes().get(i).equals(r)){
-                                        System.out.println("Erro: conta com o hash " + r + " já está aberta.");
+                                        System.out.println("Erro: Conta com o hash " + r + " já está aberta.");
                                         System.out.println("Retornando ao menu anterior...");
                                         t.sleep(5000);
                                     }
@@ -162,14 +162,16 @@ public class Agency{
                     }
                     case 10:{
                         Thread t = new Thread();
-                        System.out.println("Informe o número da conta e o valor a ser depositado:");
+                        System.out.println("Informe o número da conta:");
                         int op4 = sc5.nextInt();
+                        System.out.println("Informe o valor a ser depositado:");
                         double op5 = sc6.nextDouble();
+                        System.out.println("Saldo atual: R$ " + c.balance(op4));
                         c.deposit(op4, op5);
                         String parameter = c.acountMoviments(op4).get(c.acountMoviments(op4).size()-1);
                         int indexStart = parameter.indexOf("Hash");
                         String r = parameter.substring(indexStart+6, indexStart+18);    
-                        System.out.println("Solicitando depósito de R$ " + op5 + " na conta de número: " + op4 + " ...");
+                        System.out.println("Solicitando depósito de R$ " + op5 + " na conta de número: " + op4 + "...");
                         System.out.println("Hash da operação: " + r);
                         try {
                             t.sleep(7000);
@@ -181,7 +183,8 @@ public class Agency{
                                 t.sleep(3000);                           
                                 for (int i = 0; i<=c.bankHashes().size()-1;i++){
                                     if(c.bankHashes().get(i).equals(r)){
-                                        System.out.println("Erro: movimento já realizado. " + "Hash do movimento: " + r);
+                                        System.out.println("Erro: operação já realizada. " + "Hash do movimento: " + r);
+                                        System.out.println("Saldo atualizado: R$ " + c.balance(op4));
                                         System.out.println("Retornando ao menu anterior...");
                                         t.sleep(5000);
                                     }
@@ -202,14 +205,16 @@ public class Agency{
                     }
                     case 11:{
                         Thread t = new Thread();
-                        System.out.println("Informe o número da conta e o valor a ser sacado:");
+                        System.out.println("Informe o número da conta:");
                         int op4 = sc5.nextInt();
+                        System.out.println("Informe o valor a ser sacado:");
                         double op5 = sc6.nextDouble();
+                        System.out.println("Saldo atual: R$ " + c.balance(op4));
                         c.withdraw(op4, op5);
                         String parameter = c.acountMoviments(op4).get(c.acountMoviments(op4).size()-1);
                         int indexStart = parameter.indexOf("Hash");
                         String r = parameter.substring(indexStart+6, indexStart+18);    
-                        System.out.println("Solicitando saque de R$ " + op5 + " na conta de número: " + op4 + " ...");
+                        System.out.println("Solicitando saque de R$ " + op5 + " na conta de número: " + op4 + "...");
                         System.out.println("Hash da operação: " + r);
                         try {
                             t.sleep(7000);
@@ -217,11 +222,12 @@ public class Agency{
                             System.out.println("Tentar novamente? - digite Y para sim ou N para não.");
                             String option = sc2.nextLine();                            
                             if(option.equalsIgnoreCase("Y")){  
-                                System.out.println("Solicitando depósito de R$ " + op5 + " na conta de número: " + op4 + " novamente...");
+                                System.out.println("Solicitando saque de R$ " + op5 + " na conta de número: " + op4 + " novamente...");
                                 t.sleep(3000);                           
                                 for (int i = 0; i<=c.bankHashes().size()-1;i++){
                                     if(c.bankHashes().get(i).equals(r)){
-                                        System.out.println("Erro: movimento já realizado. " + "Hash do movimento: " + r);
+                                        System.out.println("Erro: operação já realizada. " + "Hash do movimento: " + r);
+                                        System.out.println("Saldo atualizado: R$ " + c.balance(op4));
                                         System.out.println("Retornando ao menu anterior...");
                                         t.sleep(5000);
                                     }

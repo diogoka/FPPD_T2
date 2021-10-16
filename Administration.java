@@ -178,7 +178,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
 
         public ArrayList<String> listAccs() throws RemoteException{
         ArrayList<String> JK = new ArrayList<>();
-        System.out.println("Lista de Contas");
+        //System.out.println("Lista de Contas: ");
         for (Account ACC : Accounts) {
             JK.add(ACC.toString());            
             }
@@ -314,7 +314,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
         }
      
         public void listOPS() {
-            System.out.println("Lista de Operações");
+            System.out.println("Lista de Operações: ");
             for (Operation OPP : Movements) {
                 System.out.println(OPP.toString());
             }
@@ -345,8 +345,7 @@ public class Administration extends UnicastRemoteObject implements Functions {
         hashes.add(key);
         A1.setSign(key);
         A1.setListOP(LO);        
-        ListOfAccounts.insert(A1);
-        A1.toString();    
+        ListOfAccounts.insert(A1);        
         System.out.println("Conta aberta:");
         System.out.println("Número da conta: " + A1.getNum() + " - Hash: "+ A1.getSignature() + " - Saldo: R$ " + A1.getBalance());
     }; 
